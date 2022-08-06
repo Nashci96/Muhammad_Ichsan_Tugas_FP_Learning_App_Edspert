@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "329135027324",
+    "project_id": "edspert-fp-learning-app",
+    "storage_bucket": "edspert-fp-learning-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329135027324:android:6ea18076d710cab68d05f9",
+        "android_client_info": {
+          "package_name": "com.example.flutter_edspert_fp_learning_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329135027324-o0je391eu7gat4harjhmfnici23mlvpc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnQS2EF4g-hlmvz_8DXzVJCisX6C5IxXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329135027324-o0je391eu7gat4harjhmfnici23mlvpc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
