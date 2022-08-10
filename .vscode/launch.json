@@ -8,7 +8,7 @@
             "name": "flutter_edspert_fp_learning_app",
             "request": "launch",
             "type": "dart",
-            // "deviceId": "chrome"
+            "deviceId": "chrome"
         },
         {
             "name": "flutter_edspert_fp_learning_app (profile mode)",
