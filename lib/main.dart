@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_edspert_fp_learning_app/view/login_page.dart';
+import 'package:flutter_edspert_fp_learning_app/view/main/latihan_soal/mapel_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/main_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/register_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/splash_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'constants/r.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,8 +19,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Latihan Soal',
       theme: ThemeData(
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        appBarTheme: AppBarTheme(
+          backgroundColor: R.colors.primary,
+        ),
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -35,6 +43,7 @@ class MyApp extends StatelessWidget {
         LoginPage.route:(context) => const LoginPage(), 
         RegisterPage.route:(context) => const RegisterPage(),
         MainPage.route:(context) => const MainPage(),
+        MapelPage.route:(context) => const MapelPage(),
       },
     );
   }

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.flutter_edspert_fp_learning_app">
    <application
-        android:label="flutter_edspert_fp_learning_app"
+        android:label="Latihan Soal"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
