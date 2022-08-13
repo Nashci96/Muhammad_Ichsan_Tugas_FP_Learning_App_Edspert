@@ -30,12 +30,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             Image.asset(R.assets.imgLogin),
-            SizedBox(height: 35,),
+            const SizedBox(height: 35,),
             Text(
               R.strings.welcome,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize:22,
                 fontWeight: FontWeight.w500,
                 ),
@@ -92,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
+            
           ],
         ),
       ),

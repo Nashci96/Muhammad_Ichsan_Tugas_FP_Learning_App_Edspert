@@ -21,6 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String gender = "Laki - laki";
   List<String> classSlta = ["10","11","12"];
   String selectedClass = "10";
+  final emailController = TextEditingController();
 
   onTapGender(Gender genderInput){
     if(genderInput == Gender.lakilaki){
@@ -55,7 +56,8 @@ class _RegisterPageState extends State<RegisterPage> {
           padding: const EdgeInsets.only(bottom: 20.0),
           child: ButtonLogin(
                     onTap: (){
-                      Navigator.of(context).pushNamed(MainPage.route);
+                      print(emailController.text);
+                      Navigator.of(context).pushNamedAndRemoveUntil(MainPage.route,(context)=>false);
                     },
                     backgroundColor: R.colors.primary, 
                     borderColor: R.colors.primary, 
@@ -82,6 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               SizedBox(height: 5),
               RegisterTextField(
+                controller: emailController,
                 hintText: 'Email Anda', 
                 title: 'Email',
                 ),
@@ -207,10 +210,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
 class RegisterTextField extends StatelessWidget {
   const RegisterTextField({
-    Key? key, required this.title, required this.hintText,
+    Key? key, required this.title, required this.hintText, this.controller,
   }) : super(key: key);
   final String title;
   final String hintText;
+  final TextEditingController? controller;
 
 
   @override
@@ -236,6 +240,7 @@ class RegisterTextField extends StatelessWidget {
             )
           ),
           child: TextField(
+            controller: controller,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: hintText,
