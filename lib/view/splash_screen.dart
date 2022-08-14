@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_edspert_fp_learning_app/view/login_page.dart';
 
 import '../constants/r.dart';
+import 'main_page.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -13,8 +15,15 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     Timer(const Duration(seconds: 5), (){
-      // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> LoginPage()));
-      Navigator.of(context).pushReplacementNamed(LoginPage.route);
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        Navigator.of(context).pushReplacementNamed(MainPage.route);
+      } else {
+        Navigator.of(context).pushReplacementNamed(LoginPage.route);
+      }
+
+
+      // Navigator.of(context).pushReplacementNamed(LoginPage.route);
     });
 
     return Scaffold(

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_edspert_fp_learning_app/view/login_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/main/latihan_soal/mapel_page.dart';
@@ -8,8 +9,13 @@ import 'package:flutter_edspert_fp_learning_app/view/splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'constants/r.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    // options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
