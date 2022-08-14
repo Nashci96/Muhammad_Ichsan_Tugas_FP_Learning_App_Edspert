@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_edspert_fp_learning_app/view/login_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/main/latihan_soal/mapel_page.dart';
+import 'package:flutter_edspert_fp_learning_app/view/main/latihan_soal/paket_soal_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/main_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/register_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/splash_screen.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         RegisterPage.route:(context) => const RegisterPage(),
         MainPage.route:(context) => const MainPage(),
         MapelPage.route:(context) => const MapelPage(),
+        PaketSoalPage.route:(context) => const PaketSoalPage(),
       },
     );
   }
