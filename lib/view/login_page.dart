@@ -1,10 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_edspert_fp_learning_app/models/network_response.dart';
+import 'package:flutter_edspert_fp_learning_app/repository/auth_api.dart';
+import 'package:flutter_edspert_fp_learning_app/models/user_by_email.dart';
 import 'package:flutter_edspert_fp_learning_app/view/register_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../constants/r.dart';
+import '../repository/auth_api.dart';
+import 'main_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -75,16 +80,24 @@ class _LoginPageState extends State<LoginPage> {
             ButtonLogin(
               onTap: () async {
                 await signInWithGoogle();
+
                  final user = FirebaseAuth.instance.currentUser;
                  if (user != null){
-                  Navigator.of(context).pushNamed(RegisterPage.route);
-                 } else {
+                  final dataUser = await AuthApi().getUserByEmail();
+                  if (dataUser.status == Status.success) {
+                    final data = UserByEmail.fromJson(dataUser.data!);
+                    if (data.status == 1 ) {
+                      Navigator.of(context).pushNamed(MainPage.route);
+                    } else {
+                      Navigator.of(context).pushNamed(RegisterPage.route);
+                    }
+                  }  
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text("Gagal Masuk"),
                     duration: Duration(seconds: 2),
                     ));
-                 }
-                
+                }
               },
               backgroundColor: Colors.white, 
               borderColor: R.colors.primary, 
