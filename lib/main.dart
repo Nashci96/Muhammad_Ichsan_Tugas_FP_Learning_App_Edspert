@@ -9,7 +9,6 @@ import 'package:flutter_edspert_fp_learning_app/view/splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'constants/r.dart';
-import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
