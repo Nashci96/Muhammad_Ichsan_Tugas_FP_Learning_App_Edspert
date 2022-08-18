@@ -60,4 +60,12 @@ class AuthApi {
       );
       return result;
   }
+
+  Future<NetworkResponse>  postRegister(body) async {
+    final result = await _postRequest(
+      endpoint : ApiUrl.userRegistrasi, 
+      body    : body , 
+      );
+      return result;
+  }
 }
