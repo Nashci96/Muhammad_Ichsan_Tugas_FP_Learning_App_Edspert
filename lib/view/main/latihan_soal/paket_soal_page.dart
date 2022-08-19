@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_edspert_fp_learning_app/models/paket_soal_list.dart';
+import 'package:flutter_edspert_fp_learning_app/repository/latihan_soal_api.dart';
 
 import '../../../constants/r.dart';
+import '../../../models/network_response.dart';
 
 class PaketSoalPage extends StatefulWidget {
-  const PaketSoalPage({Key? key}) : super(key: key);
+  const PaketSoalPage({Key? key, required this.id}) : super(key: key);
   static String route = "paket_soal_page";
+  final String id;
 
   @override
   State<PaketSoalPage> createState() => _PaketSoalPageState();
 }
 
 class _PaketSoalPageState extends State<PaketSoalPage> {
+  
+  PaketSoalList? paketSoalList;
+  getPaketSoal() async {
+    final paketSoalResult = await LatihanSoalApi().getPaketSoal(widget.id);
+    if (paketSoalResult.status == Status.success){
+      paketSoalList = PaketSoalList.fromJson(paketSoalResult.data!);
+    } setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPaketSoal();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,18 +53,44 @@ class _PaketSoalPageState extends State<PaketSoalPage> {
               ),
             ),
             Expanded(
-              child: GridView.count(
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                crossAxisCount: 2,
-                childAspectRatio: 3/2,
-                children: [
-                  PaketSoalWidget(),
-                  PaketSoalWidget(),
-                  PaketSoalWidget(),
-                  PaketSoalWidget(),
-                ],
-                ),
+              child: 
+              paketSoalList == null
+              ? Center(
+                child: CircularProgressIndicator(),
+                )
+              : SingleChildScrollView(
+                child: Wrap(
+                    children: 
+                      List.generate(
+                        paketSoalList!.data!.length,
+                        (index) {
+                          final currentPaketSoal = paketSoalList!.data![index];
+                          return Container(
+                            padding: EdgeInsets.all(3),
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: PaketSoalWidget(
+                              data : paketSoalList!.data![index]),
+                          );
+                          }
+                        ).toList()
+                  ),
+              ) 
+              
+              // GridView.count(
+              //   mainAxisSpacing: 10,
+              //   crossAxisSpacing: 10,
+              //   crossAxisCount: 2,
+              //   childAspectRatio: 4/3,
+              //   children: List.generate(
+              //     paketSoalList!.data!.length,
+              //     (index) {
+              //       final currentPaketSoal = paketSoalList!.data![index];
+              //       return PaketSoalWidget(
+              //         data : paketSoalList!.data![index]);
+              //       }
+              //     ).toList()
+                
+              //   ),
             ),
           ],
         ),
@@ -55,8 +102,9 @@ class _PaketSoalPageState extends State<PaketSoalPage> {
 
 class PaketSoalWidget extends StatelessWidget {
   const PaketSoalWidget({
-    Key? key,
+    Key? key, required this.data,
   }) : super(key: key);
+  final PaketSoalData data;
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +131,13 @@ class PaketSoalWidget extends StatelessWidget {
           ),
           SizedBox(height: 4,),
           Text(
-            "Aljabar",
+            data.exerciseTitle!,
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
           Text(
-            "0/0 Paket Soal",
+            "${data.jumlahDone}/${data.jumlahSoal} Paket Soal",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 9,

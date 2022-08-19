@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_edspert_fp_learning_app/models/banner_list.dart';
+import 'package:flutter_edspert_fp_learning_app/models/mapel_list.dart';
+import 'package:flutter_edspert_fp_learning_app/repository/latihan_soal_api.dart';
 import 'package:flutter_edspert_fp_learning_app/view/main/latihan_soal/mapel_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../constants/r.dart';
+import '../../../models/network_response.dart';
+import 'paket_soal_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,8 +15,35 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
-
+// 02.37 vid 31
 class _HomePageState extends State<HomePage> {
+  
+  MapelList? mapelList;
+  getMapel() async {
+    final mapelResult = await LatihanSoalApi().getMapel();
+    if (mapelResult.status == Status.success){
+      mapelList = MapelList.fromJson(mapelResult.data!);
+      setState(() {});
+    }
+  }
+
+  BannerList? bannerList;
+  getBanner() async{
+    final banner = await LatihanSoalApi().getBanner();
+    if (banner.status == Status.success){
+      bannerList = BannerList.fromJson(banner.data!);
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    getMapel();
+    getBanner();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +54,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             _buildUserHomeProfile(),
             _builtTopBanner(context),
-            _builtHomeListMapel(),
+            _builtHomeListMapel(mapelList),
             Container(
             child:Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,18 +70,32 @@ class _HomePageState extends State<HomePage> {
                         ),
                 ),
                 SizedBox(height:10),
-                Container(
-                  height: 150,
-                  child: ListView.builder(
-                    itemCount: 5,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: ((context,index){
-                      return Padding(
-                        padding: const EdgeInsets.only(left : 20.0),
-                        child: Image.asset(R.assets.bannerHome),
-                      );
-                  })),
-                ),
+
+                bannerList == null
+                ? Container(
+                  height: 70, 
+                  width: double.infinity,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                    ),
+                  )
+                : Container(
+                    height: 150,
+                    child: ListView.builder(
+                      itemCount: bannerList!.data!.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: ((context,index){
+                        final currentBanner = bannerList!.data![index];
+                        return Padding(
+                          padding: const EdgeInsets.only(left : 20.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              currentBanner.eventImage!,),
+                          ),
+                        );
+                    })),
+                  ),
                 SizedBox(height: 35,),
                  
               ],
@@ -62,7 +108,7 @@ class _HomePageState extends State<HomePage> {
     
   }
 
-  Container _builtHomeListMapel() {
+  Container _builtHomeListMapel(MapelList? list) {
     return Container(
             margin : EdgeInsets.symmetric(horizontal:20,vertical: 21),
             child:Column(
@@ -78,7 +124,10 @@ class _HomePageState extends State<HomePage> {
                     Spacer(),
                     TextButton(
                       onPressed: (){
-                        Navigator.of(context).pushNamed(MapelPage.route);
+                        Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (BuildContext context) {
+                            return MapelPage(mapel: mapelList!);
+                          }));
                       }, 
                       child: Text(
                         "Lihat Semua",
@@ -91,9 +140,39 @@ class _HomePageState extends State<HomePage> {
                       )
                   ],
                 ),
-                MapelWIdget(),
-                MapelWIdget(),
-                MapelWIdget(),
+
+                list == null 
+                  ? Container(
+                      height: 70, 
+                      width: double.infinity,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                        ),
+                  ) 
+                  : ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: 
+                      list.data!.length >3 
+                      ? 3: list.data!.length,
+                    itemBuilder: (BuildContext context,int index){
+                      final currentMapel = list.data![index];
+                      return GestureDetector(
+                        onTap: (){
+                            Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => 
+                              PaketSoalPage(id: currentMapel.courseId!),
+                            ),
+                          );
+                        },
+                        child: MapelWIdget(
+                          title: currentMapel.courseName!,
+                          totalDone: currentMapel.jumlahDone!,
+                          totalPackage: currentMapel.jumlahMateri!,
+                        ),
+                      );
+                },),
               ],
             )
           );
@@ -182,8 +261,15 @@ class _HomePageState extends State<HomePage> {
 
 class MapelWIdget extends StatelessWidget {
   const MapelWIdget({
-    Key? key,
+    Key? key, 
+    required this.title, 
+    required this.totalDone, 
+    required this.totalPackage,
   }) : super(key: key);
+
+  final String title;
+  final int totalDone;
+  final int totalPackage;
 
   @override
   Widget build(BuildContext context) {
@@ -213,14 +299,14 @@ class MapelWIdget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
               Text(
-                "Matematika",
+                title,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12
                 ),
                 ),
               Text(
-                "0/50 Paket Latihan Soal",
+                "$totalDone/$totalPackage Paket Latihan Soal",
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 12,

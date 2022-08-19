@@ -26,11 +26,16 @@ class SplashScreen extends StatelessWidget {
                     final data = UserByEmail.fromJson(dataUser.data!);
                     if (data.status == 1 ) {
                       Navigator.of(context).pushNamed(MainPage.route);
-                    } else {
+                    } 
+                    else {
                       Navigator.of(context).pushNamed(RegisterPage.route);
                     }
+                      // else {
+                      //   Navigator.of(context).pushReplacementNamed(LoginPage.route);
+                      // }
                   } 
-                } else {
+                } 
+                else {
                   Navigator.of(context).pushReplacementNamed(LoginPage.route);
                 } 
     });

@@ -4,6 +4,7 @@ import 'package:flutter_edspert_fp_learning_app/repository/auth_api.dart';
 import 'package:flutter_edspert_fp_learning_app/view/main_page.dart';
 
 import '../constants/r.dart';
+import '../helper/preference_helper.dart';
 import '../models/network_response.dart';
 import '../models/user_by_email.dart';
 import 'login_page.dart';
@@ -100,6 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       if (result.status == Status.success) {
                         final registerResult = UserByEmail.fromJson(result.data!);
                         if (registerResult.status == 1) {
+                          await preferenceHelper().setUserData(registerResult.data!);
                           Navigator.of(context).pushNamedAndRemoveUntil(
                             MainPage.route,(context)=>false);
                         } else {
