@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_edspert_fp_learning_app/models/paket_soal_list.dart';
 import 'package:flutter_edspert_fp_learning_app/repository/latihan_soal_api.dart';
+import 'package:flutter_edspert_fp_learning_app/view/main/latihan_soal/kerjakan_latihan_soal_page.dart';
 
 import '../../../constants/r.dart';
 import '../../../models/network_response.dart';
@@ -108,43 +109,53 @@ class PaketSoalWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-            ),
-      padding: const EdgeInsets.all(13.0),
-      // margin: const EdgeInsets.all(13.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.blue.withOpacity(0.2),
-            ),
-            padding: EdgeInsets.all(12),
-            child: Image.asset(
-              R.assets.icNote,
-              width: 14,
+    return GestureDetector(
+      onTap: (){
+        Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => 
+                  KerjakanLatihanSoalPage(id: data.exerciseId!),
+                ),
+              );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
               ),
-          ),
-          SizedBox(height: 4,),
-          Text(
-            data.exerciseTitle!,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
+        padding: const EdgeInsets.all(13.0),
+        // margin: const EdgeInsets.all(13.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.blue.withOpacity(0.2),
+              ),
+              padding: EdgeInsets.all(12),
+              child: Image.asset(
+                R.assets.icNote,
+                width: 14,
+                ),
             ),
-          ),
-          Text(
-            "${data.jumlahDone}/${data.jumlahSoal} Paket Soal",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 9,
-              color: R.colors.greySubtitleHome,
+            SizedBox(height: 4,),
+            Text(
+              data.exerciseTitle!,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            ),
-        ],
+            Text(
+              "${data.jumlahDone}/${data.jumlahSoal} Paket Soal",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 9,
+                color: R.colors.greySubtitleHome,
+              ),
+              ),
+          ],
+        ),
       ),
     );
   }

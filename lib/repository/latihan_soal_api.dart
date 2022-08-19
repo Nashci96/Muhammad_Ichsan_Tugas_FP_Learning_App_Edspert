@@ -90,4 +90,15 @@ class LatihanSoalApi {
       );
       return result;
   }
+
+  Future<NetworkResponse>  postQuestionList(id) async {
+    final result = await _postRequest(
+      endpoint : ApiUrl.latihanKerjakanSoal, 
+      body    : {
+        "exercise_id": id,
+        "user_email": UserEmail.getUserEmail(),
+      }, 
+      );
+      return result;
+  }
 }
