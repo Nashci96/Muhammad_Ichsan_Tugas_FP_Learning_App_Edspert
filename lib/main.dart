@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_edspert_fp_learning_app/view/login_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/main/latihan_soal/mapel_page.dart';
@@ -9,6 +10,11 @@ import 'package:flutter_edspert_fp_learning_app/view/splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'constants/r.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("handling a background message : ${message.messageId}");
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

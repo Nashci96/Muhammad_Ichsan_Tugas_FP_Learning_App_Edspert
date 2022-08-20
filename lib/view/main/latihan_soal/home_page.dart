@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_edspert_fp_learning_app/models/banner_list.dart';
 import 'package:flutter_edspert_fp_learning_app/models/mapel_list.dart';
@@ -35,12 +36,32 @@ class _HomePageState extends State<HomePage> {
       setState(() {});
     }
   }
+  
+  setupFcm() async {
+    final tokenFcm = await FirebaseMessaging.instance.getToken();
+    print("token fcm: $tokenFcm");
+
+    RemoteMessage? initialMessage = 
+      await FirebaseMessaging.instance.getInitialMessage();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) { 
+      print('Got a message while in the foreground');
+      print('message a data: ${message.data}');
+
+      if (message.notification != null){
+        print('Message also contained a notification: ${message.notification} ');
+      }
+    });
+
+
+  }
 
   @override
   void initState(){
     super.initState();
     getMapel();
     getBanner();
+    setupFcm();
   }
 
 
