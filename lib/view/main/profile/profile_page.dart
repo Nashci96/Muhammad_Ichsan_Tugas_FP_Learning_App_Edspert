@@ -42,9 +42,14 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: [
           TextButton(
             onPressed: () async {
-              Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+              final result = await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
                 return EditProfilePage();
               }));
+
+              if (result == true){
+                getUserData();
+              }
+
             }, 
             child: Text(
               "Edit",

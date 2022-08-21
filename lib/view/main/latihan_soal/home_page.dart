@@ -1,7 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_edspert_fp_learning_app/helper/preference_helper.dart';
 import 'package:flutter_edspert_fp_learning_app/models/banner_list.dart';
 import 'package:flutter_edspert_fp_learning_app/models/mapel_list.dart';
+import 'package:flutter_edspert_fp_learning_app/models/user_by_email.dart';
 import 'package:flutter_edspert_fp_learning_app/repository/latihan_soal_api.dart';
 import 'package:flutter_edspert_fp_learning_app/view/main/latihan_soal/mapel_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,6 +39,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
   
+    UserData? dataUser;
+  Future getUserData() async {
+    dataUser = await PreferenceHelper().getUserData();
+    setState(() {
+      
+    });
+  }
+
   setupFcm() async {
     final tokenFcm = await FirebaseMessaging.instance.getToken();
     print("token fcm: $tokenFcm");
@@ -62,6 +72,7 @@ class _HomePageState extends State<HomePage> {
     getMapel();
     getBanner();
     setupFcm();
+    getUserData();
   }
 
 
@@ -178,6 +189,9 @@ class _HomePageState extends State<HomePage> {
                       ? 3: list.data!.length,
                     itemBuilder: (BuildContext context,int index){
                       final currentMapel = list.data![index];
+                      print("isi mapel done");
+                      print(currentMapel.jumlahDone!);
+                      
                       return GestureDetector(
                         onTap: (){
                             Navigator.of(context).push(
@@ -193,6 +207,7 @@ class _HomePageState extends State<HomePage> {
                           totalPackage: currentMapel.jumlahMateri!,
                         ),
                       );
+                      
                 },),
               ],
             )
@@ -241,6 +256,8 @@ class _HomePageState extends State<HomePage> {
           );
   }
 
+
+
   Padding _buildUserHomeProfile() {
     return Padding(
             padding: const EdgeInsets.symmetric(
@@ -254,7 +271,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Hi, Nama User",
+                        "Hi, " + (dataUser?.userName ?? "Nama User"),
                         style: GoogleFonts.poppins().copyWith(
                           fontSize: 12, fontWeight: FontWeight.w700
                         ),
@@ -344,13 +361,31 @@ class MapelWIdget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10)  
                     ),
                   ),
-                  Container(
-                    height: 5,
-                    width: MediaQuery.of(context).size.width *0.4,
-                    decoration: BoxDecoration(
-                      color: R.colors.primary,
-                      borderRadius: BorderRadius.circular(10)  
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: totalDone,
+                        child: Container(
+                          height: 5,
+                          // width: MediaQuery.of(context).size.width *0.4,
+                          decoration: BoxDecoration(
+                            color: R.colors.primary,
+                            borderRadius: BorderRadius.circular(10)  
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: totalPackage - totalDone,
+                        child: Container(
+                          // height: 5,
+                          // width: MediaQuery.of(context).size.width *0.4,
+                          // decoration: BoxDecoration(
+                          //   color: R.colors.primary,
+                          //   borderRadius: BorderRadius.circular(10)  
+                          // ),
+                        ),
+                      ),
+                    ],
                   ),
                   
                 ],

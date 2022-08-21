@@ -48,7 +48,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final dataUser = await PreferenceHelper().getUserData();
     fullNameController.text = dataUser!.userName! ;
     schoolNameController.text = dataUser!.userAsalSekolah! ;
-    gender = dataUser.userGender!;
+    gender = dataUser!.userGender!;
     setState(() {
     });
   }
@@ -98,14 +98,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         "gender" : gender,
                         "foto"  : UserEmail.getUserPhotoUrl(),
                       };
-                      print(json);
-                      final result = await AuthApi().postRegister(json);
+                      // print(json);
+                      final result = await AuthApi().postUpdateUser(json);
+                      print(result.status);
+                      
                       if (result.status == Status.success) {
                         final registerResult = UserByEmail.fromJson(result.data!);
+                        
+                        print("registerResult.status");
+                        print(registerResult.status);
+                        
                         if (registerResult.status == 1) {
                           await PreferenceHelper().setUserData(registerResult.data!);
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                            MainPage.route,(context)=>false);
+                          Navigator.pop(context,true);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -164,7 +169,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
-                          primary: gender=="Laki-laki" ? R.colors.primary : Colors.white,
+                          primary: gender.toLowerCase()=="Laki-laki".toLowerCase() 
+                            ? R.colors.primary 
+                            : Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                             side: BorderSide(
@@ -180,7 +187,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           Text("Laki-laki",
                             style: TextStyle(
                             fontSize: 14,
-                            color: gender =="Laki-laki" ? Colors.white : Colors.black,
+                            color: gender.toLowerCase() =="Laki-laki".toLowerCase()
+                             ? Colors.white
+                             : Colors.black,
                           ),
                           ),
                         ),
@@ -192,7 +201,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
-                          primary: gender=="Perempuan" ? R.colors.primary : Colors.white,
+                          primary: gender.toLowerCase()=="Perempuan".toLowerCase()
+                           ? R.colors.primary 
+                           : Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                             side: BorderSide(

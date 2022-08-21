@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_edspert_fp_learning_app/helper/preference_helper.dart';
@@ -119,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
+            if(Platform.isIOS) 
             ButtonLogin(
               onTap: (){},
               backgroundColor: Colors.black, 

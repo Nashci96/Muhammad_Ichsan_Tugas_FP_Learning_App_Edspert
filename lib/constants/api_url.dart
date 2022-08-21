@@ -4,7 +4,7 @@ class ApiUrl{
   
   static String users = "users";
   static String userRegistrasi = "users/registrasi";
-  static String userUpdateProfile = "users";
+  static String userUpdateProfile = "users/update";
 
   static String banner = "event/list";
 

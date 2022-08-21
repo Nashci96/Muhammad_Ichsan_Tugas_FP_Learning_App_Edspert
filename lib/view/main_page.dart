@@ -79,12 +79,20 @@ class _MainPageState extends State<MainPage> {
                             duration: Duration(milliseconds: 500), 
                             curve: Curves.bounceInOut
                             );
+                            setState(() {
+                              
+                            });
                         },
                         child: Column(
                           children: [
                             Image.asset(
                               R.assets.icHome,
-                              height: 30,),
+                              height: 30,
+                              color: index == 0
+                                  ? null
+                                  : Colors.grey,
+                              
+                              ),
                             Text("Home"),
                           ],
                         ),
@@ -125,11 +133,20 @@ class _MainPageState extends State<MainPage> {
                             duration: Duration(milliseconds: 500), 
                             curve: Curves.easeInOut
                             );
+                          setState(() {
+                            
+                          });
                         },
                         child: Column(
-                          children: const [
-                            Icon(Icons.person),
-                            Text("Profile"),
+                          children: [
+                            Image.asset(
+                              "assets/ic_user.png",
+                              height: 30,
+                              color: index == 1
+                                  ? null
+                                  : Colors.grey,
+                              ),
+                            const Text("Profile"),
                           ],
                         ),
                       ),
