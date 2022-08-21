@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_edspert_fp_learning_app/constants/api_url.dart';
 import 'package:flutter_edspert_fp_learning_app/helper/user_email.dart';
+import 'package:flutter_edspert_fp_learning_app/models/latihan_soal_skor.dart';
 import 'package:flutter_edspert_fp_learning_app/models/network_response.dart';
 
 class LatihanSoalApi {
@@ -100,5 +101,24 @@ class LatihanSoalApi {
       }, 
       );
       return result;
+  }
+
+  Future<NetworkResponse> postStudentAnswer(payload) async {
+    final result = await _postRequest(
+      endpoint: ApiUrl.latihanSubmitJawaban,
+      body: payload
+    );
+    return result;
+  }
+  
+  Future<NetworkResponse> getResult(id) async{
+    final result = await _getRequest(
+      endpoint: ApiUrl.latihanSkor,
+      param: {
+        "exercise_id" : id,
+        "user_email": UserEmail.getUserEmail(),
+      }
+    );
+    return result;
   }
 }

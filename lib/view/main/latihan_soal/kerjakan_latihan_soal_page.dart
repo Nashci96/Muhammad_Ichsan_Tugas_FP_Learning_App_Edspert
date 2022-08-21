@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_edspert_fp_learning_app/helper/user_email.dart';
 import 'package:flutter_edspert_fp_learning_app/models/kerjakan_soal_list.dart';
 import 'package:flutter_edspert_fp_learning_app/repository/latihan_soal_api.dart';
+import 'package:flutter_edspert_fp_learning_app/view/main/latihan_soal/result_page.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import '../../../constants/r.dart';
@@ -63,10 +65,51 @@ with SingleTickerProviderStateMixin{
               onPressed: () async {
                 if (_controller!.index == soalList!.data!.length - 1){
                   final result = await showModalBottomSheet(
-                    context: context, 
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent, 
                     builder: (context){
                       return BottomSheetConfirmation();
                     });
+                    print(result);
+
+                    if (result == true) {
+                    List<String> answer = [];
+                    List<String> questionId = [];
+
+                    soalList!.data!.forEach((element) {
+                      questionId.add(element.bankQuestionId!);
+                      answer.add(element.studentAnswer!);
+                     });
+                      
+                      final payload = {
+                        "user_email": UserEmail.getUserEmail(),
+                        "exercise_id": widget.id,
+                        "bank_question_id": questionId,
+                        "student_answer": answer,
+                      };
+                      print(payload);
+
+                      final result = 
+                        await LatihanSoalApi().postStudentAnswer(payload);
+                      
+                      // print(result.status);
+                      
+                      if (result.status == Status.success){
+                        print(result.status);
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context){
+                            return ResultPage(exerciseId: widget.id,);
+                          }));
+                      } else {
+                        print(result.status);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: 
+                            Text("Submit gagal. silahkan ulangi"),
+                        ));
+                      }
+
+                    }
                   
                 } else {
                   _controller!.animateTo(_controller!.index + 1);
@@ -256,7 +299,15 @@ class _BottomSheetConfirmationState extends State<BottomSheetConfirmation> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20),
+      decoration: new BoxDecoration(
+        color: Colors.white,
+        borderRadius: new BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        )
+      ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 100,

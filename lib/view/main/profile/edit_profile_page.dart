@@ -3,25 +3,25 @@ import 'package:flutter_edspert_fp_learning_app/helper/user_email.dart';
 import 'package:flutter_edspert_fp_learning_app/repository/auth_api.dart';
 import 'package:flutter_edspert_fp_learning_app/view/main_page.dart';
 
-import '../constants/r.dart';
-import '../helper/preference_helper.dart';
-import '../models/network_response.dart';
-import '../models/user_by_email.dart';
-import 'login_page.dart';
+import '../../../constants/r.dart';
+import '../../../helper/preference_helper.dart';
+import '../../../models/network_response.dart';
+import '../../../models/user_by_email.dart';
+import '../../login_page.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class EditProfilePage extends StatefulWidget {
+  const EditProfilePage({Key? key}) : super(key: key);
   static String route = "register_page";
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
 enum Gender{
   lakilaki , perempuan
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _EditProfilePageState extends State<EditProfilePage> {
 
   List<String> classSlta = ["10","11","12"];
 
@@ -42,11 +42,14 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  initDataUser(){
+  initDataUser() async {
     emailController.text = UserEmail.getUserEmail()!;
-    fullNameController.text = UserEmail.getUserDisplayName()!;
+    // fullNameController.text = UserEmail.getUserDisplayName()!;
+    final dataUser = await PreferenceHelper().getUserData();
+    fullNameController.text = dataUser!.userName! ;
+    schoolNameController.text = dataUser!.userAsalSekolah! ;
+    gender = dataUser.userGender!;
     setState(() {
-      
     });
   }
 
@@ -60,33 +63,32 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff0f3f5),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight + 20),
-        child: AppBar(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(25.0),
-              bottomRight: Radius.circular(25.0),
-            )),
-          elevation: 0,
-          backgroundColor: Colors.white,
-          iconTheme: const IconThemeData(color: Colors.black),
-          title: const Text(
-            "Yuk isi data diri",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Colors.black
-              ),
+      // backgroundColor: Color(0xfff0f3f5),
+      appBar: AppBar(
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.only(
+        //     bottomLeft: Radius.circular(25.0),
+        //     bottomRight: Radius.circular(25.0),
+        //   )),
+        elevation: 0,
+        // backgroundColor: Colors.white,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          "Edit Account",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Colors.white
             ),
-        ),
+          ),
       ),
       bottomNavigationBar: 
       SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
           child: ButtonLogin(
+                    radius: 8,
                     onTap: () async {
                       final json = {
                         "email" : emailController.text,
@@ -116,9 +118,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     backgroundColor: R.colors.primary, 
                     borderColor: R.colors.primary, 
                     child: Text(
-                      R.strings.daftar,
+                      R.strings.perbaruiAkun,
                       style: const TextStyle(
-                        fontSize:17,
+                        fontSize:16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         ),
@@ -132,14 +134,14 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RegisterTextField(
+              EditProfileTextField(
                 controller: emailController,
                 hintText: 'Email Anda', 
                 title: 'Email',
                 enabled: false,
                 ),
               SizedBox(height: 5),
-              RegisterTextField(
+              EditProfileTextField(
                 hintText: 'Nama Lengkap Anda', 
                 title: 'Nama Lengkap',
                 controller: fullNameController,
@@ -150,6 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  color: R.colors.greySubtitle 
                   ),
                 ),
               SizedBox(height: 5),
@@ -219,6 +222,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                color: R.colors.greySubtitle 
                   ),
                 ),
               SizedBox(height: 5),
@@ -251,7 +255,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(height: 5),
-              RegisterTextField(
+              EditProfileTextField(
                 hintText: 'Nama Sekolah Anda', 
                 title: 'Nama Sekolah',
                 controller: schoolNameController,
@@ -265,8 +269,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-class RegisterTextField extends StatelessWidget {
-  const RegisterTextField({
+class EditProfileTextField extends StatelessWidget {
+  const EditProfileTextField({
     Key? key, 
     required this.title, 
     required this.hintText, 
@@ -281,39 +285,33 @@ class RegisterTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-         Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-          ),
-         ),
-         SizedBox(height: 5),
-         Container(
-          padding: EdgeInsets.symmetric(horizontal: 14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.white,
-            border: Border.all(
-              color: R.colors.greyBorder,
-            )
-          ),
-          child: TextField(
-            enabled: enabled,
-            controller: controller,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: hintText,
-              hintStyle: TextStyle(
-                color: R.colors.greyHintText,
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+           Text(
+              title,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: R.colors.greySubtitle 
             ),
-          ),
-         )
-      ],
+           ),
+           SizedBox(height: 5),
+           TextField(
+             enabled: enabled,
+             controller: controller,
+             decoration: InputDecoration(
+               // border: InputBorder.none,
+               hintText: hintText,
+               hintStyle: TextStyle(
+                 color: R.colors.greyHintText,
+               ),
+             ),
+           )
+        ],
+      ),
     );
   }
 }

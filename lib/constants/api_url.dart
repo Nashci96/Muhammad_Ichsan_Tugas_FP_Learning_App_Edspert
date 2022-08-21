@@ -12,7 +12,7 @@ class ApiUrl{
   static String latihanPaketSoal = "exercise/data_exercise";
   static String latihanKerjakanSoal = "exercise/kerjakan";
   static String latihanSubmitJawaban = "exercise/input_jawaban";
-  static String latihanLihatSkor = "exercise/kerjakan";
+  static String latihanSkor = "exercise/score_result";
 
   
 

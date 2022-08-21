@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_edspert_fp_learning_app/helper/preference_helper.dart';
+import 'package:flutter_edspert_fp_learning_app/models/user_by_email.dart';
+import 'package:flutter_edspert_fp_learning_app/view/main/profile/edit_profile_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../constants/r.dart';
@@ -13,6 +16,23 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  UserData? user;
+  getUserData() async {
+    final data = await PreferenceHelper().getUserData();
+    user = data;
+    print(user);
+    setState(() {
+      
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +41,11 @@ class _ProfilePageState extends State<ProfilePage> {
         centerTitle: true,
         actions: [
           TextButton(
-            onPressed: (){}, 
+            onPressed: () async {
+              Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+                return EditProfilePage();
+              }));
+            }, 
             child: Text(
               "Edit",
               style: TextStyle(
@@ -30,7 +54,10 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
         ],
       ),
-      body: Column(
+      body:
+      user == null
+      ? Center(child: CircularProgressIndicator(),)
+      : Column(
         children: [
           Container( 
             padding: EdgeInsets.only(
@@ -52,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Nama User",
+                     user!.userName!,
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
@@ -60,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Text(
-                      "Nama Sekolah User",
+                     user!.userAsalSekolah!,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.white,
@@ -102,52 +129,65 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Text("Identitas Diri"),
                 SizedBox(height:15),
-                Text("Nama Lengkap",
+                Text("Nama Lengkap User",
                   style: TextStyle(
                     color: R.colors.greySubtitleHome,
                     fontSize: 12,
                   ),
                 ),
-                Text("Nama Lengkap User",
+                Text(user!.userName!,
                   style: TextStyle(
                     // color: R.colors.greySubtitleHome,
                     fontSize: 12,
                   ),
                 ),
                 SizedBox(height:15),
-                Text("Nama Lengkap",
+                Text("Email",
                   style: TextStyle(
                     color: R.colors.greySubtitleHome,
                     fontSize: 12,
                   ),
                 ),
-                Text("Nama Lengkap User",
+                Text(user!.userEmail!,
                   style: TextStyle(
                     // color: R.colors.greySubtitleHome,
                     fontSize: 12,
                   ),
                 ),
                 SizedBox(height:15),
-                Text("Nama Lengkap",
+                Text("Jenis Kelamin",
                   style: TextStyle(
                     color: R.colors.greySubtitleHome,
                     fontSize: 12,
                   ),
                 ),
-                Text("Nama Lengkap User",
+                Text(user!.userGender!,
                   style: TextStyle(
                     // color: R.colors.greySubtitleHome,
                     fontSize: 12,
                   ),
                 ),
                 SizedBox(height:15),
-                Text("Nama Lengkap",
+                Text("Kelas",
                   style: TextStyle(
                     color: R.colors.greySubtitleHome,
                     fontSize: 12,
                   ),
                 ),
-                Text("Nama Lengkap User",
+                Text(user!.kelas!,
+                  style: TextStyle(
+                    // color: R.colors.greySubtitleHome,
+                    fontSize: 12,
+                  ),
+                ),
+                SizedBox(height:15),
+                Text("Asal Sekolah",
+                  style: TextStyle(
+                    color: R.colors.greySubtitleHome,
+                    fontSize: 12,
+                  ),
+                ),
+                Text(user!.userAsalSekolah!,
                   style: TextStyle(
                     // color: R.colors.greySubtitleHome,
                     fontSize: 12,
@@ -159,6 +199,8 @@ class _ProfilePageState extends State<ProfilePage> {
           // SizedBox(height: 15,),
           GestureDetector(
             onTap: () async {
+              
+
               await GoogleSignIn().signOut();
               await FirebaseAuth.instance.signOut();
               Navigator.of(context).pushNamedAndRemoveUntil(LoginPage.route, (route) => false);

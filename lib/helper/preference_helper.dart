@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter_edspert_fp_learning_app/models/user_by_email.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class preferenceHelper{
+class PreferenceHelper{
   static String userData = "data_user";
 
   Future<SharedPreferences> sharePref() async {
@@ -15,9 +15,9 @@ class preferenceHelper{
     await _pref.setString(key, data);
   }
 
-  Future _getString(key) async {
+  Future<String?> _getString(key) async {
     final _pref = await sharePref();
-    await _pref.getString(
+    return _pref.getString(
       key,
     );
   }
@@ -27,10 +27,11 @@ class preferenceHelper{
     final userDataString = jsonEncode(json);
     await _saveString(userData, userDataString);
   }
-
+ 
   Future<UserData?>getUserData() async {
     final user = await _getString(userData);
-    final jsonUserData = jsonDecode(user);
+    print(user);
+    final jsonUserData = jsonDecode(user!);
     final userDataModel = UserData.fromJson(jsonUserData);
     return userDataModel;
   }

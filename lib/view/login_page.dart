@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (dataUser.status == Status.success) {
                     final data = UserByEmail.fromJson(dataUser.data!);
                     if (data.status == 1 ) {
-                      await preferenceHelper().setUserData(data.data!);
+                      await PreferenceHelper().setUserData(data.data!);
                       Navigator.of(context).pushNamed(MainPage.route);
                     } else {
                       Navigator.of(context).pushNamed(RegisterPage.route);
@@ -153,9 +153,11 @@ class ButtonLogin extends StatelessWidget {
     required this.backgroundColor, 
     required this.child, 
     required this.borderColor, 
-    required this.onTap,
+    required this.onTap, 
+    this.radius,
   }) : super(key: key);
 
+  final double? radius;
   final Color backgroundColor;
   final Widget child;
   final Color borderColor;
@@ -171,7 +173,7 @@ class ButtonLogin extends StatelessWidget {
           fixedSize: Size(MediaQuery.of(context).size.width*0.8, 50),
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(radius ?? 25),
             side: BorderSide(
               color: borderColor,
               )
