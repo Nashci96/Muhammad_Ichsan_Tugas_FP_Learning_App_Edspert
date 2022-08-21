@@ -114,13 +114,27 @@ class _ChatPageState extends State<ChatPage> {
                                                   .showSnackBar(
                                                     SnackBar(
                                                       content: Text("Text Telah Disalin"))));
+                                                      Navigator.pop(context);
                                             },
                                           ),
                                           if(user.uid == currentChat["uid"])
                                           ListTile(
                                             title: Text("Hapus"),
                                             onTap: (){
-                                              
+                                              String id = currentChat.id;
+                                              print(id);
+                                              chat.doc(id).update(
+                                                  {"is_deleted" : true 
+                                                }).then((value) {
+                                              ScaffoldMessenger
+                                                  .of(context)
+                                                  .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text("Text Telah Dihapus")));
+                                                      Navigator.pop(context);
+                                              });
+                                              print("currentchat is deleted = ");
+                                              print(currentChat["is_deleted"]);
                                             },
                                           ),
                                         ],
@@ -148,19 +162,7 @@ class _ChatPageState extends State<ChatPage> {
                                   : Radius.circular(10),
                                 ),
                               ),
-                              child: currentChat["type"] == "file"
-                                ? Image.network(
-                                  currentChat["file_url"],
-                                  errorBuilder:  (context, error, stackTrace) {
-                                    return Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: Icon(Icons.warning),
-                                    );
-                                  },
-                                ) 
-                              
-                               : Text(currentChat["content"],
-                              ),
+                              child: baloonChat(currentChat),
                             ),
                           ),
                           Text(
@@ -304,6 +306,7 @@ class _ChatPageState extends State<ChatPage> {
                           "type" : "text",
                           "file_url" : null,
                           "time" : FieldValue.serverTimestamp(),
+                          "is_deleted": false,
                         };
                         chat.add(chatContent).whenComplete((){ 
                           textController.clear();
@@ -317,5 +320,28 @@ class _ChatPageState extends State<ChatPage> {
         ],
       ),
     );
+  }
+
+  Widget baloonChat(QueryDocumentSnapshot<Object?> currentChat) {
+    if (currentChat["is_deleted"] == true){
+      return Text( "Pesan telah dihapus", 
+            style: TextStyle(
+              color:  Colors.grey,
+              fontStyle:   FontStyle.italic,
+            ),
+          );
+        }
+    return  currentChat["type"] == "file"
+            ? Image.network(
+              currentChat["file_url"],
+              errorBuilder:  
+              (context, error, stackTrace) {
+                return Container(
+                  padding: EdgeInsets.all(10),
+                  child: Icon(Icons.warning),
+                );
+              },
+            ) 
+            : Text( currentChat["content"], );
   }
 }
