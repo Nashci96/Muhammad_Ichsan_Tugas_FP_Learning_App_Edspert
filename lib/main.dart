@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_edspert_fp_learning_app/view/login_page.dart';
-import 'package:flutter_edspert_fp_learning_app/view/main/latihan_soal/mapel_page.dart';
-import 'package:flutter_edspert_fp_learning_app/view/main/latihan_soal/paket_soal_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/main_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/register_page.dart';
 import 'package:flutter_edspert_fp_learning_app/view/splash_screen.dart';
@@ -21,6 +21,12 @@ Future<void> main() async {
   await Firebase.initializeApp(
     // options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('google_fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+  });
+
   runApp(const MyApp());
 } 
 

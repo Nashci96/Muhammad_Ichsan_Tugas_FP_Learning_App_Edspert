@@ -38,6 +38,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_html: ^2.2.1
+  
   google_fonts: ^3.0.1
   google_sign_in: ^5.4.1
   image_picker: ^0.8.5+3
@@ -45,9 +46,16 @@ dependencies:
   shared_preferences: ^2.0.15
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.10.0
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/ic_atom.png"
+  remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
